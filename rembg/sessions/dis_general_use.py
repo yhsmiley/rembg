@@ -30,17 +30,19 @@ class DisSession(BaseSession):
         return [mask]
 
     @classmethod
-    def download_models(cls, *args, **kwargs):
+    def download_models(cls, internet_download, *args, **kwargs):
         fname = f"{cls.name(*args, **kwargs)}.onnx"
-        pooch.retrieve(
-            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx",
-            None
-            if cls.checksum_disabled(*args, **kwargs)
-            else "md5:fc16ebd8b0c10d971d3513d564d01e29",
-            fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
-            progressbar=True,
-        )
+
+        if internet_download:
+            pooch.retrieve(
+                "https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx",
+                None
+                if cls.checksum_disabled(*args, **kwargs)
+                else "md5:fc16ebd8b0c10d971d3513d564d01e29",
+                fname=fname,
+                path=cls.u2net_home(*args, **kwargs),
+                progressbar=True,
+            )
 
         return os.path.join(cls.u2net_home(*args, **kwargs), fname)
 

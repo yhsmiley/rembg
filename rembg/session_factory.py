@@ -9,7 +9,7 @@ from .sessions.u2net import U2netSession
 
 
 def new_session(
-    model_name: str = "u2net", providers=None, *args, **kwargs
+    model_name: str = "u2net", providers=None, internet_download=False, *args, **kwargs
 ) -> BaseSession:
     session_class: Type[BaseSession] = U2netSession
 
@@ -23,4 +23,4 @@ def new_session(
     if "OMP_NUM_THREADS" in os.environ:
         sess_opts.inter_op_num_threads = int(os.environ["OMP_NUM_THREADS"])
 
-    return session_class(model_name, sess_opts, providers, *args, **kwargs)
+    return session_class(model_name, sess_opts, providers, internet_download, *args, **kwargs)

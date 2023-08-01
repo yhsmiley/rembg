@@ -13,6 +13,7 @@ class BaseSession:
         model_name: str,
         sess_opts: ort.SessionOptions,
         providers=None,
+        internet_download=False,
         *args,
         **kwargs
     ):
@@ -29,7 +30,7 @@ class BaseSession:
             self.providers.extend(_providers)
 
         self.inner_session = ort.InferenceSession(
-            str(self.__class__.download_models(*args, **kwargs)),
+            str(self.__class__.download_models(internet_download, *args, **kwargs)),
             providers=self.providers,
             sess_options=sess_opts,
         )

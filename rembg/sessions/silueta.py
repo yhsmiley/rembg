@@ -32,17 +32,19 @@ class SiluetaSession(BaseSession):
         return [mask]
 
     @classmethod
-    def download_models(cls, *args, **kwargs):
+    def download_models(cls, internet_download, *args, **kwargs):
         fname = f"{cls.name()}.onnx"
-        pooch.retrieve(
-            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx",
-            None
-            if cls.checksum_disabled(*args, **kwargs)
-            else "md5:55e59e0d8062d2f5d013f4725ee84782",
-            fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
-            progressbar=True,
-        )
+
+        if internet_download:
+            pooch.retrieve(
+                "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx",
+                None
+                if cls.checksum_disabled(*args, **kwargs)
+                else "md5:55e59e0d8062d2f5d013f4725ee84782",
+                fname=fname,
+                path=cls.u2net_home(*args, **kwargs),
+                progressbar=True,
+            )
 
         return os.path.join(cls.u2net_home(*args, **kwargs), fname)
 
